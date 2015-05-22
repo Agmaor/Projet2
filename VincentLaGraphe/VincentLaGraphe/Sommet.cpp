@@ -122,12 +122,13 @@ unsigned int CSommet::SOMGetNumero()
 CArc * CSommet::SOMGetArcPartant(unsigned int uiIndice)
 {
 	if(uiIndice >= uiSOMTaillePartant) throw Cexception(INCORRECT_INDEX_EXCEPTION);
-	return nullptr;
+	return paSOMPartant[uiIndice];
 }
 
 CArc * CSommet::SOMGetArcArrivant(unsigned int uiIndice)
 {
-	return nullptr;
+	if(uiIndice >= uiSOMTailleArrivant) throw Cexception(INCORRECT_INDEX_EXCEPTION);
+	return paSOMArrivant[uiIndice];
 }
 
 void CSommet::SOMSetNumero(unsigned int uiNumero)
