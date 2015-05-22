@@ -1,0 +1,25 @@
+﻿La génération a démarré 20/05/2015 15:38:37.
+     1>Projet "D:\Programation\Visual - WorkSpace\VincentLaGraphe\VincentLaGraphe\VincentLaGraphe.vcxproj" sur le nœud 2 (Rebuild cible(s)).
+     1>ClCompile:
+         D:\Program Files (x86)\Visual Studio\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Arc.cpp Cexception.cpp Graphe.cpp GrapheFile.cpp main.cpp Sommet.cpp
+         Sommet.cpp
+         main.cpp
+         GrapheFile.cpp
+         Graphe.cpp
+     1>d:\programation\visual - workspace\vincentlagraphe\vincentlagraphe\graphe.cpp(59): warning C4172: retourne l'adresse d'une variable locale ou temporaire
+         Cexception.cpp
+         Arc.cpp
+         Génération de code en cours...
+       Link:
+         D:\Program Files (x86)\Visual Studio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Programation\Visual - WorkSpace\VincentLaGraphe\Debug\VincentLaGraphe.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Programation\Visual - WorkSpace\VincentLaGraphe\Debug\VincentLaGraphe.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Programation\Visual - WorkSpace\VincentLaGraphe\Debug\VincentLaGraphe.lib" /MACHINE:X86 Debug\Arc.obj
+         Debug\Cexception.obj
+         Debug\Graphe.obj
+         Debug\GrapheFile.obj
+         Debug\main.obj
+         Debug\Sommet.obj
+         VincentLaGraphe.vcxproj -> D:\Programation\Visual - WorkSpace\VincentLaGraphe\Debug\VincentLaGraphe.exe
+     1>Génération du projet "D:\Programation\Visual - WorkSpace\VincentLaGraphe\VincentLaGraphe\VincentLaGraphe.vcxproj" terminée (Rebuild cible(s)).
+
+La génération a réussi.
+
+Temps écoulé 00:00:00.39
