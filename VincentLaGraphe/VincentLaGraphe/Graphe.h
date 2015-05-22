@@ -7,8 +7,11 @@
 */
 
 #pragma once
-#include <stdio.h>
+
 #include "Sommet.h"
+#include "Cexception.h"
+
+#include <iostream>
 
 class CGraphe
 {
@@ -27,6 +30,7 @@ public:
 	*/
 	CGraphe();
 	CGraphe(const CGraphe & gGraphe);
+	CGraphe(const char * filepath);
 	~CGraphe();
 
 	/**************************************************************************
@@ -38,13 +42,15 @@ public:
 	void GRAAjouterArc(unsigned int uiSommetSource, unsigned int uiSommetDestination);
 	void GRAModifierArc(unsigned int uiSource, unsigned int uiDestination, unsigned int uiNouvelleDestination);
 	void GRASupprimerArc(unsigned int uiSource, unsigned int uiDestination);
+
 	void GRAAfficherGraphe();
 	
 	/**************************************************************************
 	************************     GETTERS/SETTERS     **************************
 	***************************************************************************/
 	CSommet * GRAGetSommet(unsigned int uiIndice);
-	unsigned int GRAGetTailleSommet();
+	CSommet * GRAGetSommetById(unsigned int uiId);
+	unsigned int GRAGetTailleSommet() { return uiGRATailleSommet; }
 
 	/**************************************************************************
 	*****************************    OPERATOR     *****************************

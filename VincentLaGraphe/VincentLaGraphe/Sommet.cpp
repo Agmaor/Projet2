@@ -3,11 +3,11 @@
 
 CSommet::CSommet(unsigned int uiNumero)
 {
-	SOMSetNumero(uiNumero);
 	paSOMArrivant = nullptr;
 	paSOMPartant = nullptr;
 	uiSOMTailleArrivant = 0;
 	uiSOMTaillePartant = 0;
+	SOMSetNumero(uiNumero);
 }
 
 CSommet::CSommet(const CSommet & sSommet)
@@ -48,7 +48,7 @@ CArc * CSommet::SOMCreerArcPartant(unsigned int uiIdDestination)
 	CArc * newArc = new CArc(uiIdDestination);
 	
 	CArc ** paPartantTemp =(CArc**) realloc(paSOMPartant, (uiSOMTaillePartant+1) * sizeof(CArc*));
-	if(paSOMPartant == nullptr)throw Cexception(MEMORY_ALLOCATION_EXCEPTION);
+	if(paPartantTemp == nullptr)throw Cexception(MEMORY_ALLOCATION_EXCEPTION);
 	free(paSOMPartant);
 	paSOMPartant = paPartantTemp;
 	
@@ -69,7 +69,7 @@ void CSommet::SOMSupprimerArcPartant(unsigned int uiDestination)
 			paPartantTemp[uiIndexTemp] = paSOMPartant[uiIndex];
 			uiIndexTemp++;
 		}
-		if(uiIndexTemp == uiSOMTaillePartant-1) throw Cexception(NONEXISTANT_SOMMET_EXCEPTION);
+		if(uiIndexTemp == uiSOMTaillePartant-1) throw Cexception(NONEXISTENT_SOMMET_EXCEPTION);
 		
 	}
 	free(paSOMPartant);
@@ -89,7 +89,7 @@ void CSommet::SOMSupprimerArcArrivant(CArc * paSource)
 			paArrivantTemp[uiIndexTemp] = paSOMArrivant[uiIndex];
 			uiIndexTemp++;
 		}
-		if(uiIndexTemp == uiSOMTailleArrivant-1) throw Cexception(NONEXISTANT_SOMMET_EXCEPTION);
+		if(uiIndexTemp == uiSOMTailleArrivant-1) throw Cexception(NONEXISTENT_SOMMET_EXCEPTION);
 		
 	}
 	free(paSOMArrivant);
