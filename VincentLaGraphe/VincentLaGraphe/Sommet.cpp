@@ -17,89 +17,123 @@ CSommet::CSommet(const CSommet & sSommet)
 
 CSommet::~CSommet(void)
 {
-	for(unsigned int uiBoucle = 0 ; uiBoucle < SOMGetTailleArrivant(); uiBoucle++)
-	{
-		free(paSOMArrivant[uiBoucle]);
-	}
-	free(paSOMArrivant);
-
+	//Detruit tout les arcs restant
 	for(unsigned int uiBoucle = 0; uiBoucle < SOMGetTaillePartant(); uiBoucle++)
 	{
-		free(paSOMPartant[uiBoucle]);
+		delete paSOMPartant[uiBoucle];
 	}
+	//On libère les tableaux
 	free(paSOMPartant);
+	free(paSOMArrivant);
 
 }
 	
 void CSommet::SOMAjouterArcArrivant(CArc * paArrivant)
 {
+	//On realloue notre tableau en augmentant la taille de 1
 	CArc ** paArrivantTemp =(CArc**)realloc(paSOMArrivant,(uiSOMTailleArrivant+1) * sizeof(CArc*));
 	if(paArrivantTemp == nullptr)throw Cexception(MEMORY_ALLOCATION_EXCEPTION);
 
-	free(paSOMArrivant);
 	paSOMArrivant = paArrivantTemp;
 	
+	//On ajoute notre arc à notre tableau
 	paSOMArrivant[uiSOMTailleArrivant] = paArrivant;
 	uiSOMTailleArrivant++;
 }
 
 CArc * CSommet::SOMCreerArcPartant(unsigned int uiIdDestination)
 {
+	//On test si l'arc existe déjà. Si oui, on déclenche l'exception ARC_ALREADY_EXCEPTION
+	for(int uiBoucle = 0 ; uiBoucle < uiSOMTaillePartant; uiBoucle++)
+	{
+		if(uiIdDestination == paSOMPartant[uiBoucle]->ARCGetDestination())
+			throw Cexception(ARC_ALREADY_EXISTS_EXCEPTION);
+	}
+
+	//Creation du nouvel arc
 	CArc * newArc = new CArc(uiIdDestination);
 	
+	//On réalloue notre tableau en augmentant la taille de 1
 	CArc ** paPartantTemp =(CArc**) realloc(paSOMPartant, (uiSOMTaillePartant+1) * sizeof(CArc*));
 	if(paPartantTemp == nullptr)throw Cexception(MEMORY_ALLOCATION_EXCEPTION);
-	free(paSOMPartant);
+
 	paSOMPartant = paPartantTemp;
 	
+	//On ajoute à notre tableau d'arc partant l'arc nouvelement crée.
 	paSOMPartant[uiSOMTaillePartant] = newArc;
 	uiSOMTaillePartant++;
+
 	return newArc;
 }
 
 void CSommet::SOMSupprimerArcPartant(unsigned int uiDestination)
 {
-	CArc ** paPartantTemp = (CArc**)realloc(paSOMPartant, sizeof(CArc*) * (uiSOMTaillePartant-1));
+	//On test la présence de l'ARC dans le tableau ArcPartant, si il n'y est pas, on déclenche l'exception NONEXISTENT_SOMMET_EXCEPTION
+	if(SOMGetArcReliant(uiDestination)==nullptr) throw Cexception(NONEXISTENT_SOMMET_EXCEPTION);
+
+	//Allocation d'un tableau de taille N-1
+	CArc ** paPartantTemp = (CArc**) malloc(sizeof(CArc*) * (uiSOMTaillePartant-1));
+
+	//On copie les elements de paSOMPartant vers notre tableau temporaire, sauf l'element que l'on souhaite supprimé.
 	int uiIndexTemp = 0;
 	for(unsigned int uiIndex = 0; uiIndex < uiSOMTaillePartant; uiIndex++)
 	{
-		if(uiDestination == paSOMPartant[uiIndex]->ARCGetDestination()) free(paSOMPartant[uiIndex]);
+		if(uiDestination == paSOMPartant[uiIndex]->ARCGetDestination())
+		{
+			//On supprime l'arc
+			free(paSOMPartant[uiIndex]);
+		}
 		else
 		{
 			paPartantTemp[uiIndexTemp] = paSOMPartant[uiIndex];
 			uiIndexTemp++;
-		}
-		if(uiIndexTemp == uiSOMTaillePartant-1) throw Cexception(NONEXISTENT_SOMMET_EXCEPTION);
-		
+		}		
 	}
+	//Suppression de l'ancien tableau
 	free(paSOMPartant);
+	//On donne à notre tableau l'adresse du tableau temporaire
 	paSOMPartant = paPartantTemp;
 	uiSOMTaillePartant--;
 }
 
 void CSommet::SOMSupprimerArcArrivant(CArc * paSource)
 {
-		CArc ** paArrivantTemp = (CArc**)realloc(paSOMArrivant, sizeof(CArc*) * (uiSOMTailleArrivant-1));
+	//Pour vérifier la présence du sommet, on utilise un booleen qui se met à vrai si le sommet est trouvé.
+	bool presence = false;
+
+	//Allocation d'un tableau de taille N-1.
+	CArc ** paArrivantTemp = (CArc**) malloc(sizeof(CArc*) * (uiSOMTailleArrivant - 1));
 	int uiIndexTemp = 0;
 	for(unsigned int uiIndex = 0; uiIndex < uiSOMTailleArrivant; uiIndex++)
 	{
-		if(paSource->ARCGetDestination() == paSOMPartant[uiIndex]->ARCGetDestination()){}
+		if(paSource == paSOMArrivant[uiIndex])
+		{
+			presence = true;
+		}
 		else
 		{
 			paArrivantTemp[uiIndexTemp] = paSOMArrivant[uiIndex];
 			uiIndexTemp++;
 		}
-		if(uiIndexTemp == uiSOMTailleArrivant-1) throw Cexception(NONEXISTENT_SOMMET_EXCEPTION);
 		
 	}
 	free(paSOMArrivant);
-	paSOMPartant = paArrivantTemp;
-	uiSOMTaillePartant--;
+	paSOMArrivant = paArrivantTemp;
+
+	//Si le booleen n'est pas à vrai, alors on déclenche l'exception NONEXISTENT_SOMMET_EXCEPTION
+	if(!presence) throw Cexception(NONEXISTENT_SOMMET_EXCEPTION);
+
+	uiSOMTailleArrivant--;
 }
 
 	
 CArc * CSommet::SOMGetArcReliant(unsigned int uiDestination)
 {
+	//On cherche la présence de l'Arc dans le tableau d'arc Partant.
+	for(unsigned int uiIndex = 0; uiIndex < uiSOMTaillePartant; uiIndex++)
+	{
+		if(paSOMPartant[uiIndex]->ARCGetDestination() == uiDestination) return paSOMPartant[uiIndex];
+	}
 	return nullptr;
 }
 
@@ -134,7 +168,8 @@ CArc * CSommet::SOMGetArcArrivant(unsigned int uiIndice)
 void CSommet::SOMSetNumero(unsigned int uiNumero)
 {
 	uiSOMNumero = uiNumero;
-	for(unsigned uiIndex = 0; uiIndex < uiSOMTailleArrivant; uiIndex++)
+	//On assigne à chaque Arc arrivant, le nouveau numero de sommet.
+	for(unsigned int uiIndex = 0; uiIndex < uiSOMTailleArrivant; uiIndex++)
 	{
 		paSOMArrivant[uiIndex]->ARCSetDestination(uiNumero);
 	}

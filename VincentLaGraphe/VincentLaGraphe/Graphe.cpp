@@ -14,7 +14,7 @@ CGraphe::CGraphe(const CGraphe & gGraphe)
 
 CGraphe::~CGraphe(void)
 {
-	for(unsigned int uiIndex = 0; uiIndex <= uiGRATailleSommet; uiIndex++)
+	for(unsigned int uiIndex = 0; uiIndex < uiGRATailleSommet; uiIndex++)
 		delete psGRASommet[uiIndex];
 
 	delete[] psGRASommet;
@@ -41,6 +41,8 @@ void CGraphe::GRAModifierSommet(unsigned int uiSommet, unsigned int uiNouveauSom
 	CSommet * sSommet = GRAGetSommetById(uiSommet);
 	if(sSommet == nullptr)
 		throw Cexception(NONEXISTENT_SOMMET_EXCEPTION);
+	if (GRAGetSommetById(uiNouveauSommet) != nullptr)
+		throw Cexception(SOMMET_ALREADY_EXISTS_EXCEPTION);
 
 	sSommet->SOMSetNumero(uiNouveauSommet);
 }
@@ -121,6 +123,8 @@ void CGraphe::GRAModifierArc(unsigned int uiSource, unsigned int uiDestination, 
 	psOldDest->SOMSupprimerArcArrivant(paArc);
 	paArc->ARCSetDestination(uiNouvelleDestination);
 	psNewDest->SOMAjouterArcArrivant(paArc);
+
+
 }
 
 void CGraphe::GRASupprimerArc(unsigned int uiSource, unsigned int uiDestination)
