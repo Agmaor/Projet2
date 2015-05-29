@@ -14,7 +14,7 @@ int main()
 			graphe.GRAAjouterArc(1, 2);
 			graphe.GRAAjouterArc(2, 0);
 			graphe.GRAAfficherGraphe();
-
+	
 			graphe.GRAModifierArc(0,2,2);
 			graphe.GRAAfficherGraphe();
 
